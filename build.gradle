@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'  // Shadow
+
 }
 
 java {
@@ -19,6 +21,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.15'
 
     // HiveServer2 서비스 및 인증 관련 (PasswdAuthenticationProvider 포함)
     implementation 'org.apache.hive:hive-service:3.1.1'
@@ -32,4 +35,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jar {
+    finalizedBy shadowJar
 }

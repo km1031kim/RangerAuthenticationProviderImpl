@@ -13,26 +13,28 @@ import javax.security.sasl.AuthenticationException;
 public class RangerAuthenticationProviderImpl implements PasswdAuthenticationProvider {
 
     private static final Logger log = LoggerFactory.getLogger(RangerAuthenticationProviderImpl.class);
+    private final static String RANGER_REST_URL_CONF_KEY = "ranger.plugin.hive.policy.rest.url";
+    private final String rangerUrl;
+    private final RestAuthService restAuthService;
+
+
+    public RangerAuthenticationProviderImpl() {
+        HiveConf conf = new HiveConf();
+        this.rangerUrl = conf.get(RANGER_REST_URL_CONF_KEY);
+        this.restAuthService = new RestAuthService(rangerUrl);
+    }
 
     @Override
     public void Authenticate(String username, String password) throws AuthenticationException {
 
-        log.info("[RangerAuthenticationProviderImpl] start authentication, username : {}", username);
+        log.info("[RangerAuthenticationProviderImpl] Get Ranger Admin URL from HiveConf. " + RANGER_REST_URL_CONF_KEY + " = {}", rangerUrl);
 
-        // conf에서 ranger url 가져오기
-        HiveConf conf = new HiveConf();
-        String url = conf.get("ranger.plugin.hive.policy.rest.url");
+        if (rangerUrl == null || rangerUrl.isEmpty()) {
+            throw new AuthenticationException("[RangerAuthenticationProviderImpl] URL is null or empty, " + RANGER_REST_URL_CONF_KEY + " = " + rangerUrl);
+        }
 
-        // RestTemplate 으로 id, pwd 전달 -> 200OK -> void, 그 외는 -> AuthenticationException.
-
-
-        log.info("[RangerAuthenticationProviderImpl] get ranger api url from conf, url : {}", url);
-
-        // api 요청 날리기
-
-        // 정상 -> void
-
-
-        // 예외 -> AuthenticationException
+        if (!restAuthService.authenticate(username, password)) {
+            throw new AuthenticationException("Authentication is failed");
+        }
     }
 }
