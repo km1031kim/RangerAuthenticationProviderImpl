@@ -13,21 +13,21 @@ public class RangerAuthenticationProviderImpl implements PasswdAuthenticationPro
     private static final Logger log = LoggerFactory.getLogger(RangerAuthenticationProviderImpl.class);
 
     private final static String RANGER_REST_URL_CONF_KEY = "ranger.plugin.hive.policy.rest.url";
+    private static final String XUSERS_API = "/service/xusers/users";
     private final String rangerUrl;
     private final RestAuthService restAuthService;
 
 
     public RangerAuthenticationProviderImpl() {
         HiveConf conf = new HiveConf();
-        this.rangerUrl = conf.get(RANGER_REST_URL_CONF_KEY);
+        this.rangerUrl = conf.get(RANGER_REST_URL_CONF_KEY) + XUSERS_API;
         this.restAuthService = new RestAuthService(rangerUrl);
     }
 
 
     // 테스트 편의를 위한 생성자
-    public RangerAuthenticationProviderImpl(RestAuthService restAuthService) {
-        HiveConf conf = new HiveConf();
-        this.rangerUrl = conf.get(RANGER_REST_URL_CONF_KEY);
+    public RangerAuthenticationProviderImpl(String rangerUrl, RestAuthService restAuthService) {
+        this.rangerUrl = rangerUrl;
         this.restAuthService = restAuthService;
     }
 
@@ -39,5 +39,7 @@ public class RangerAuthenticationProviderImpl implements PasswdAuthenticationPro
         if (!restAuthService.authenticate(username, password)) {
             throw new AuthenticationException("Authentication is failed");
         }
+
+        log.info("Authentication is finished");
     }
 }
