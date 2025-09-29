@@ -37,7 +37,7 @@ class RangerAuthenticationProviderImplTest {
             Mockito.when(restAuthService.authenticate(anyString(), anyString())).thenReturn(true);
 
             // then
-            assertDoesNotThrow(() -> authenticationProvider.Authenticate("username", "password"));
+            assertDoesNotThrow(() -> authenticationProvider.Authenticate("dummyUsername", "dummyPassword"));
         }
 
         @Test
@@ -48,7 +48,7 @@ class RangerAuthenticationProviderImplTest {
             Mockito.when(restAuthService.authenticate(any(), any())).thenReturn(false);
 
             // then
-            assertThrows(AuthenticationException.class, () -> authenticationProvider.Authenticate("username", "password"));
+            assertThrows(AuthenticationException.class, () -> authenticationProvider.Authenticate("dummyUsername", "dummyPassword"));
         }
 
     }
