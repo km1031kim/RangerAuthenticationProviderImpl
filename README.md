@@ -24,8 +24,9 @@ beeline 인증 실패
 ---
 
 beeline 인증 성공
-
+```bash
 [root@edge01 ~]# beeline -n customUser -u jdbc:hive2://`hostname -f`:10000 -p rangeradmin123
+```
 
 <img width="1903" height="178" alt="image" src="https://github.com/user-attachments/assets/c347c514-2b34-4668-9aca-9d777993ff4f" />
 
