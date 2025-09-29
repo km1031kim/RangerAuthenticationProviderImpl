@@ -1,53 +1,55 @@
 package org.example;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.hive.service.auth.PasswdAuthenticationProvider;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import javax.security.sasl.AuthenticationException;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 
+@ExtendWith(MockitoExtension.class)
 class RangerAuthenticationProviderImplTest {
 
-
+    @Mock
     private RestAuthService restAuthService;
 
+    @InjectMocks
+    private RangerAuthenticationProviderImpl authenticationProvider;
+
     @Nested
-    @DisplayName("인증 성공 테스트")
+    @DisplayName("인증 성공 / 실패 테스트")
     class AuthenticationSuccessTest {
 
         @Test
         @DisplayName("인증 성공")
-        public void AUTH_OK() {
+        void AUTH_OK() throws AuthenticationException {
 
+            // given & when
+            Mockito.when(restAuthService.authenticate(anyString(), anyString())).thenReturn(true);
+
+            // then
+            assertDoesNotThrow(() -> authenticationProvider.Authenticate("username", "password"));
+        }
+
+        @Test
+        @DisplayName("인증 실패")
+        void AUTH_FAILED() throws AuthenticationException {
+
+            // given & when
+            Mockito.when(restAuthService.authenticate(any(), any())).thenReturn(false);
+
+            // then
+            assertThrows(AuthenticationException.class, () -> authenticationProvider.Authenticate("username", "password"));
         }
 
     }
-
-
-    @Nested
-    @DisplayName("인증 실패 테스트")
-    class AuthenticationFailTest {
-
-        @Test
-        @DisplayName("인증 실패 - 인증되지 않은 id, pwd")
-        public void AUTH_FAILED() {
-
-        }
-
-        @Test
-        @DisplayName("인증 실패 - endpoint url이 빈 문자열인 경우")
-        public void URL_IS_EMPTY() {
-
-        }
-
-
-        @Test
-        @DisplayName("인증 실패 - endpoint url이 null 인 경우")
-        public void URL_IS_NULL() {
-
-        }
-    }
-
 }

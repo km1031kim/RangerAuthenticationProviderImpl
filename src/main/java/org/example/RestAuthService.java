@@ -21,6 +21,11 @@ public class RestAuthService {
 
     public boolean authenticate(String username, String password) {
 
+        if (endpoint == null || endpoint.isEmpty()) {
+            log.warn("url is null or empty");
+            return false;
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBasicAuth(username, password);
 
