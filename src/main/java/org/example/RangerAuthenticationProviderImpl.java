@@ -34,7 +34,7 @@ public class RangerAuthenticationProviderImpl implements PasswdAuthenticationPro
     @Override
     public void Authenticate(String username, String password) throws AuthenticationException {
 
-        log.info("[RangerAuthenticationProviderImpl] Get Ranger Admin URL from HiveConf. " + RANGER_REST_URL_CONF_KEY + " = {}", rangerUrl);
+        log.info("Get Ranger Admin URL from HiveConf. " + RANGER_REST_URL_CONF_KEY + " = {}", rangerUrl);
 
         if (!restAuthService.authenticate(username, password)) {
             throw new AuthenticationException("Authentication is failed");

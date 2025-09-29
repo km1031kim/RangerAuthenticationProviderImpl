@@ -1,7 +1,7 @@
 package org.example;
 
-import org.apache.hive.service.auth.PasswdAuthenticationProvider;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,31 +25,28 @@ class RangerAuthenticationProviderImplTest {
     @InjectMocks
     private RangerAuthenticationProviderImpl authenticationProvider;
 
-    @Nested
-    @DisplayName("인증 성공 / 실패 테스트")
-    class AuthenticationSuccessTest {
 
-        @Test
-        @DisplayName("인증 성공")
-        void AUTH_OK() throws AuthenticationException {
+    @Test
+    @DisplayName("인증 성공")
+    void AUTH_OK() throws AuthenticationException {
 
-            // given & when
-            Mockito.when(restAuthService.authenticate(anyString(), anyString())).thenReturn(true);
+        // given & when
+        Mockito.when(restAuthService.authenticate(anyString(), anyString())).thenReturn(true);
 
-            // then
-            assertDoesNotThrow(() -> authenticationProvider.Authenticate("dummyUsername", "dummyPassword"));
-        }
-
-        @Test
-        @DisplayName("인증 실패")
-        void AUTH_FAILED() throws AuthenticationException {
-
-            // given & when
-            Mockito.when(restAuthService.authenticate(any(), any())).thenReturn(false);
-
-            // then
-            assertThrows(AuthenticationException.class, () -> authenticationProvider.Authenticate("dummyUsername", "dummyPassword"));
-        }
-
+        // then
+        assertDoesNotThrow(() -> authenticationProvider.Authenticate("dummyUsername", "dummyPassword"));
     }
+
+    @Test
+    @DisplayName("인증 실패")
+    void AUTH_FAILED() throws AuthenticationException {
+
+        // given & when
+        Mockito.when(restAuthService.authenticate(any(), any())).thenReturn(false);
+
+        // then
+        assertThrows(AuthenticationException.class, () -> authenticationProvider.Authenticate("dummyUsername", "dummyPassword"));
+    }
+
+
 }
