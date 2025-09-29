@@ -14,8 +14,6 @@ Ranger Admin 웹을 통한 테스트 유저 생성
 
 ---
 
-<img width="1801" height="159" alt="image" src="https://github.com/user-attachments/assets/a9ca7f66-d696-41bf-a33a-53d919e7f9d6" />
-
 beeline 인증 실패  
 
 [root@edge01 ~]# beeline -n customUser -u jdbc:hive2://`hostname -f`:10000 -p worngpassword
